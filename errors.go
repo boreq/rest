@@ -1,14 +1,27 @@
 package rest
 
+import "net/http"
+
 type errorBody struct {
 	StatusCode int    `json:"statusCode"`
 	Message    string `json:"message"`
 }
 
+// Error represents an error response from the API. Returning it from your
+// handler will produce a message serialized in the following way:
+//
+//  {
+//  	"statusCode": 123,
+//  	"message": "Provided message."
+//  }
+//
+// Error encapsulates the response which means that all methods available on
+// that type can be used freely on an error.
 type Error struct {
 	Response
 }
 
+// NewError creates a new error with the specified status code and message.
 func NewError(statusCode int, message string) Error {
 	body := errorBody{
 		StatusCode: statusCode,
@@ -19,6 +32,8 @@ func NewError(statusCode int, message string) Error {
 	}
 }
 
+// WithMessage returns a new error with the changed message. This method makes
+// it easy to use the provided builtin error types with non-standard messages.
 func (e Error) WithMessage(message string) Error {
 	r2 := e.clone()
 	r2.body = errorBody{
@@ -28,44 +43,50 @@ func (e Error) WithMessage(message string) Error {
 	return Error{r2}
 }
 
-var ErrBadRequest = NewError(400, "Bad request.")
-var ErrUnauthorized = NewError(401, "Unauthorized.")
-var ErrPaymentRequired = NewError(402, "Payment required.")
-var ErrForbidden = NewError(403, "Forbidden.")
-var ErrNotFound = NewError(404, "Not found.")
-var ErrMethodNotAllowed = NewError(405, "Method not allowed.")
-var ErrNotAcceptable = NewError(406, "Not acceptable.")
-var ErrProxyAuthRequired = NewError(407, "Proxy auth required.")
-var ErrRequestTimeout = NewError(408, "Request timeout.")
-var ErrConflict = NewError(409, "Conflict.")
-var ErrGone = NewError(410, "Gone.")
-var ErrLengthRequired = NewError(411, "Length required.")
-var ErrPreconditionFailed = NewError(412, "Precondition failed.")
-var ErrRequestEntityTooLarge = NewError(413, "Request entity too large.")
-var ErrRequestURITooLong = NewError(414, "Request URI too long.")
-var ErrUnsupportedMediaType = NewError(415, "Unsupported media type.")
-var ErrRequestedRangeNotSatisfiable = NewError(416, "Requested range not satisfiable.")
-var ErrExpectationFailed = NewError(417, "Expectation failed.")
-var ErrTeapot = NewError(418, "I'm a teapot.")
-var ErrMisdirectedRequest = NewError(421, "Misredirected request.")
-var ErrUnprocessableEntity = NewError(422, "Unprocessable entity.")
-var ErrLocked = NewError(423, "Locked.")
-var ErrFailedDependency = NewError(424, "Failed dependency.")
-var ErrTooEarly = NewError(425, "Too early.")
-var ErrUpgradeRequired = NewError(426, "Upgrade required.")
-var ErrPreconditionRequired = NewError(428, "Precondition required.")
-var ErrTooManyRequests = NewError(429, "Too many requests.")
-var ErrRequestHeaderFieldsTooLarge = NewError(431, "Request header fields too large.")
-var ErrUnavailableForLegalReasons = NewError(451, "Unavailable for legal reasons.")
+// Predefined 4xx client errors.
+var (
+	ErrBadRequest                   = NewError(http.StatusBadRequest, "Bad request.")
+	ErrUnauthorized                 = NewError(http.StatusUnauthorized, "Unauthorized.")
+	ErrPaymentRequired              = NewError(http.StatusPaymentRequired, "Payment required.")
+	ErrForbidden                    = NewError(http.StatusForbidden, "Forbidden.")
+	ErrNotFound                     = NewError(http.StatusForbidden, "Not found.")
+	ErrMethodNotAllowed             = NewError(http.StatusMethodNotAllowed, "Method not allowed.")
+	ErrNotAcceptable                = NewError(http.StatusNotAcceptable, "Not acceptable.")
+	ErrProxyAuthRequired            = NewError(http.StatusProxyAuthRequired, "Proxy auth required.")
+	ErrRequestTimeout               = NewError(http.StatusRequestTimeout, "Request timeout.")
+	ErrConflict                     = NewError(http.StatusConflict, "Conflict.")
+	ErrGone                         = NewError(http.StatusGone, "Gone.")
+	ErrLengthRequired               = NewError(http.StatusLengthRequired, "Length required.")
+	ErrPreconditionFailed           = NewError(http.StatusPreconditionFailed, "Precondition failed.")
+	ErrRequestEntityTooLarge        = NewError(http.StatusRequestEntityTooLarge, "Request entity too large.")
+	ErrRequestURITooLong            = NewError(http.StatusRequestURITooLong, "Request URI too long.")
+	ErrUnsupportedMediaType         = NewError(http.StatusUnsupportedMediaType, "Unsupported media type.")
+	ErrRequestedRangeNotSatisfiable = NewError(http.StatusRequestedRangeNotSatisfiable, "Requested range not satisfiable.")
+	ErrExpectationFailed            = NewError(http.StatusExpectationFailed, "Expectation failed.")
+	ErrTeapot                       = NewError(http.StatusTeapot, "I'm a teapot.")
+	ErrMisdirectedRequest           = NewError(http.StatusMisdirectedRequest, "Misredirected request.")
+	ErrUnprocessableEntity          = NewError(http.StatusUnprocessableEntity, "Unprocessable entity.")
+	ErrLocked                       = NewError(http.StatusLocked, "Locked.")
+	ErrFailedDependency             = NewError(http.StatusFailedDependency, "Failed dependency.")
+	ErrTooEarly                     = NewError(http.StatusTooEarly, "Too early.")
+	ErrUpgradeRequired              = NewError(http.StatusUpgradeRequired, "Upgrade required.")
+	ErrPreconditionRequired         = NewError(http.StatusPreconditionRequired, "Precondition required.")
+	ErrTooManyRequests              = NewError(http.StatusTooManyRequests, "Too many requests.")
+	ErrRequestHeaderFieldsTooLarge  = NewError(http.StatusRequestHeaderFieldsTooLarge, "Request header fields too large.")
+	ErrUnavailableForLegalReasons   = NewError(http.StatusUnavailableForLegalReasons, "Unavailable for legal reasons.")
+)
 
-var ErrInternalServerError = NewError(500, "Internal server error.")
-var ErrNotImplemented = NewError(501, "Not implemented.")
-var ErrBadGateway = NewError(502, "Bad gateway.")
-var ErrServiceUnavailable = NewError(503, "Service unavailable.")
-var ErrGatewayTimeout = NewError(504, "Gateway timeout.")
-var ErrHTTPVersionNotSupported = NewError(505, "HTTP version not supported.")
-var ErrVariantAlsoNegotiates = NewError(506, "Variant also negotiates.")
-var ErrInsufficientStorage = NewError(507, "Insufficient storage.")
-var ErrLoopDetected = NewError(508, "Loop detected.")
-var ErrNotExtended = NewError(510, "Not extended.")
-var ErrNetworkAuthenticationRequired = NewError(511, "Network authentication required.")
+// Predefined 5xx server errors.
+var (
+	ErrInternalServerError           = NewError(http.StatusInternalServerError, "Internal server error.")
+	ErrNotImplemented                = NewError(http.StatusNotImplemented, "Not implemented.")
+	ErrBadGateway                    = NewError(http.StatusBadGateway, "Bad gateway.")
+	ErrServiceUnavailable            = NewError(http.StatusServiceUnavailable, "Service unavailable.")
+	ErrGatewayTimeout                = NewError(http.StatusGatewayTimeout, "Gateway timeout.")
+	ErrHTTPVersionNotSupported       = NewError(http.StatusHTTPVersionNotSupported, "HTTP version not supported.")
+	ErrVariantAlsoNegotiates         = NewError(http.StatusVariantAlsoNegotiates, "Variant also negotiates.")
+	ErrInsufficientStorage           = NewError(http.StatusInsufficientStorage, "Insufficient storage.")
+	ErrLoopDetected                  = NewError(http.StatusLoopDetected, "Loop detected.")
+	ErrNotExtended                   = NewError(http.StatusNotExtended, "Not extended.")
+	ErrNetworkAuthenticationRequired = NewError(http.StatusNetworkAuthenticationRequired, "Network authentication required.")
+)

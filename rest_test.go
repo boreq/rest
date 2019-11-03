@@ -107,3 +107,21 @@ func someBody() interface{} {
 		Field: "value",
 	}
 }
+
+func ExampleWrap() {
+	handler := func(r *http.Request) rest.RestResponse {
+		return rest.NewResponse("response").WithHeader("X-Clacks-Overhead", "GNU Terry Pratchett")
+	}
+
+	server := httptest.NewServer(rest.Wrap(handler))
+	defer server.Close()
+}
+
+func ExampleError_WithMessage() {
+	handler := func(r *http.Request) rest.RestResponse {
+		return rest.ErrInternalServerError.WithMessage("Custom error message.")
+	}
+
+	server := httptest.NewServer(rest.Wrap(handler))
+	defer server.Close()
+}

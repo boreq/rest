@@ -1,5 +1,3 @@
-github.com/boreq/errors v0.0.0-20191101220741-73e4c81591ea h1:OfBE7JzMwCGRfHk14DqNNh0tfx4jH/LlAC9p6RGY8/Y=
-github.com/boreq/errors v0.0.0-20191101220741-73e4c81591ea/go.mod h1:B3dsXzhYvfgUXp7ViU/moPYM4PojgQ9MiQ21uvY6qqQ=
 github.com/boreq/errors v0.1.0 h1:aJIXv9JnyR5KtxFpQ8/AiblH3nfYmr1e1yoTze/5A1k=
 github.com/boreq/errors v0.1.0/go.mod h1:B3dsXzhYvfgUXp7ViU/moPYM4PojgQ9MiQ21uvY6qqQ=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
