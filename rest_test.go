@@ -62,7 +62,7 @@ func TestResponseImpossilbeToMarshal(t *testing.T) {
 		return rest.NewResponse(math.Inf(1))
 	}
 	res, body := execute(t, handler)
-	require.Equal(t, `{"statusCode":500,"message":"Internal server error."}`, string(body))
+	require.Equal(t, `{"message":"Internal server error."}`, string(body))
 	require.Equal(t, 500, res.StatusCode)
 	require.Equal(t, "application/json", res.Header.Get("Content-Type"))
 }
@@ -72,7 +72,7 @@ func TestError(t *testing.T) {
 		return rest.ErrNotAcceptable
 	}
 	res, body := execute(t, handler)
-	require.Equal(t, `{"statusCode":406,"message":"Not acceptable."}`, string(body))
+	require.Equal(t, `{"message":"Not acceptable."}`, string(body))
 	require.Equal(t, 406, res.StatusCode)
 	require.Equal(t, "application/json", res.Header.Get("Content-Type"))
 }
@@ -82,7 +82,7 @@ func TestErrorWithMessage(t *testing.T) {
 		return rest.ErrNotAcceptable.WithMessage("Custom message.")
 	}
 	res, body := execute(t, handler)
-	require.Equal(t, `{"statusCode":406,"message":"Custom message."}`, string(body))
+	require.Equal(t, `{"message":"Custom message."}`, string(body))
 	require.Equal(t, 406, res.StatusCode)
 	require.Equal(t, "application/json", res.Header.Get("Content-Type"))
 }

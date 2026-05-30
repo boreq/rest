@@ -3,17 +3,15 @@ package rest
 import "net/http"
 
 type errorBody struct {
-	StatusCode int    `json:"statusCode"`
-	Message    string `json:"message"`
+	Message string `json:"message"`
 }
 
 // Error represents an error response from the API. Returning it from your
 // handler will produce a message serialized in the following way:
 //
-//  {
-//  	"statusCode": 123,
-//  	"message": "Provided message."
-//  }
+//	{
+//		"message": "Provided message."
+//	}
 //
 // Error encapsulates the response which means that all methods available on
 // that type can be used freely on an error.
@@ -24,8 +22,7 @@ type Error struct {
 // NewError creates a new error with the specified status code and message.
 func NewError(statusCode int, message string) Error {
 	body := errorBody{
-		StatusCode: statusCode,
-		Message:    message,
+		Message: message,
 	}
 	return Error{
 		Response: NewResponse(body).WithStatusCode(statusCode),
@@ -37,8 +34,7 @@ func NewError(statusCode int, message string) Error {
 func (e Error) WithMessage(message string) Error {
 	r2 := e.clone()
 	r2.body = errorBody{
-		StatusCode: r2.StatusCode(),
-		Message:    message,
+		Message: message,
 	}
 	return Error{r2}
 }
