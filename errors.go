@@ -45,7 +45,7 @@ var (
 	ErrUnauthorized                 = NewError(http.StatusUnauthorized, "Unauthorized.")
 	ErrPaymentRequired              = NewError(http.StatusPaymentRequired, "Payment required.")
 	ErrForbidden                    = NewError(http.StatusForbidden, "Forbidden.")
-	ErrNotFound                     = NewError(http.StatusForbidden, "Not found.")
+	ErrNotFound                     = NewError(http.StatusNotFound, "Not found.")
 	ErrMethodNotAllowed             = NewError(http.StatusMethodNotAllowed, "Method not allowed.")
 	ErrNotAcceptable                = NewError(http.StatusNotAcceptable, "Not acceptable.")
 	ErrProxyAuthRequired            = NewError(http.StatusProxyAuthRequired, "Proxy auth required.")
